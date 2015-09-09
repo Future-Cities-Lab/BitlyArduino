@@ -47,23 +47,11 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, ledPin4>(leds, 432, 108);
   FastLED.addLeds<NEOPIXEL, ledPin5>(leds, 540, 108);
 
-  for (int i = 0; i < 108; i++) {
-    leds[i] = CRGB::Red;
+  for (int i = 0; i < 324; i++) {
+    leds[i] = CRGB(135,206,250);
   }
-  for (int i = 108; i < 216; i++) {
-    leds[i] = CRGB::White;
-  }
-  for (int i = 216; i < 324; i++) {
-    leds[i] = CRGB::Blue;
-  }
-  for (int i = 324; i < 432; i++) {
-    leds[i] = CRGB::Yellow;
-  }
-  for (int i = 432; i < 540; i++) {
-    leds[i] = CRGB::White;
-  }
-  for (int i = 540; i < 648; i++) {
-    leds[i] = CRGB::Purple;
+  for (int i = 324; i < 648; i++) {
+    leds[i] = CRGB(240,230,140);
   }
   FastLED.show();
 }

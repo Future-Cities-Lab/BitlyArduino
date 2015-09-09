@@ -22,6 +22,9 @@ CRGB leds[NUM_LEDS];
 const int IN_BUFFER_SIZE = 974;
 char packetBuffer[974];
 
+boolean starting = true;
+int brightness = 255;
+
 void setup() {
   delay(2000);
 
@@ -45,23 +48,11 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, ledPin4>(leds, 432, 108);
   FastLED.addLeds<NEOPIXEL, ledPin5>(leds, 540, 108);
 
-  for (int i = 0; i < 108; i++) {
-    leds[i] = CRGB::Red;
+  for (int i = 0; i < 324; i++) {
+    leds[i] = CRGB(46,139,87);
   }
-  for (int i = 108; i < 216; i++) {
-    leds[i] = CRGB::White;
-  }
-  for (int i = 216; i < 324; i++) {
-    leds[i] = CRGB::Blue;
-  }
-  for (int i = 324; i < 432; i++) {
-    leds[i] = CRGB::Yellow;
-  }
-  for (int i = 432; i < 540; i++) {
-    leds[i] = CRGB::White;
-  }
-  for (int i = 540; i < 648; i++) {
-    leds[i] = CRGB::Purple;
+  for (int i = 324; i < 648; i++) {
+    leds[i] = CRGB(0,255,255);
   }
   FastLED.show();
 }

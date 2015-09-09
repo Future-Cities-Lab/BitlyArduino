@@ -22,6 +22,9 @@ CRGB leds[NUM_LEDS];
 const int IN_BUFFER_SIZE = 974;
 char packetBuffer[974];
 
+boolean starting = true;
+int brightness = 255;
+
 void setup() {
   delay(2000);
 
@@ -45,39 +48,43 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, ledPin4>(leds, 432, 108);
   FastLED.addLeds<NEOPIXEL, ledPin5>(leds, 540, 108);
 
-  for (int i = 0; i < 108; i++) {
-    leds[i] = CRGB::Red;
+  for (int i = 0; i < 324; i++) {
+    leds[i] = CRGB(0,0,128);
   }
-  for (int i = 108; i < 216; i++) {
-    leds[i] = CRGB::White;
-  }
-  for (int i = 216; i < 324; i++) {
-    leds[i] = CRGB::Blue;
-  }
-  for (int i = 324; i < 432; i++) {
-    leds[i] = CRGB::Yellow;
-  }
-  for (int i = 432; i < 540; i++) {
-    leds[i] = CRGB::White;
-  }
-  for (int i = 540; i < 648; i++) {
-    leds[i] = CRGB::Purple;
+  for (int i = 324; i < 648; i++) {
+    leds[i] = CRGB(255,215,0);
   }
   FastLED.show();
 }
 
 void loop() {
-  int packetSize = Udp.parsePacket();
-  if (packetSize == IN_BUFFER_SIZE) {
-    Serial.println("Showing!");
-    Udp.read((char*)packetBuffer, IN_BUFFER_SIZE);
-    if (packetBuffer[0] == 5 && packetBuffer[1] == 3) {
-      memcpy(leds, packetBuffer+2, 972);
-    } else if (packetBuffer[0] == 5 && packetBuffer[1] == 4) {
-      memcpy(&leds[324], packetBuffer+2, 972);
+  if (starting) {
+    for (int i = 0; i < 648; i++) {
+      FastLED.setBrightness(brightness);
     }
-  } else if (packetSize == 1) {
+    brightness--;
+    if (brightness <= 0) {
+      starting = false;
+      brightness = 255;
+      for (int i = 0; i < 648; i++) {
+        leds[i] = CRGB::Black;
+      }
+      FastLED.setBrightness(brightness);
+    }
     FastLED.show();
+  } else {
+  int packetSize = Udp.parsePacket();
+    if (packetSize == IN_BUFFER_SIZE) {
+      Serial.println("Showing!");
+      Udp.read((char*)packetBuffer, IN_BUFFER_SIZE);
+      if (packetBuffer[0] == 5 && packetBuffer[1] == 3) {
+        memcpy(leds, packetBuffer+2, 972);
+      } else if (packetBuffer[0] == 5 && packetBuffer[1] == 4) {
+        memcpy(&leds[324], packetBuffer+2, 972);
+      }
+    } else if (packetSize == 1) {
+      FastLED.show();
+    }
   }
 }
 

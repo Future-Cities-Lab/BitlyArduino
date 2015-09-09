@@ -47,8 +47,11 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, ledPin3>(leds, 324, 108);
   FastLED.addLeds<NEOPIXEL, ledPin4>(leds, 432, 108);
   FastLED.addLeds<NEOPIXEL, ledPin5>(leds, 540, 108);
-  for (int i = 0; i < 648; i++) {
-    leds[i] = CRGB(100, 100, 100);
+  for (int i = 0; i < 324; i++) {
+    leds[i] = CRGB(255, 0, 0);
+  }
+  for (int i = 324; i < 648; i++) {
+    leds[i] = CRGB(0, 255, 0);
   }
   FastLED.show();
 }
