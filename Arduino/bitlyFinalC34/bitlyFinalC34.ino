@@ -58,17 +58,33 @@ void setup() {
 }
 
 void loop() {
-  int packetSize = Udp.parsePacket();
-  if (packetSize == IN_BUFFER_SIZE) {
-    Serial.println("Showing!");
-    Udp.read((char*)packetBuffer, IN_BUFFER_SIZE);
-    if (packetBuffer[0] == 3 && packetBuffer[1] == 3) {
-      memcpy(leds, packetBuffer+2, 972);
-    } else if (packetBuffer[0] == 3 && packetBuffer[1] == 4) {
-      memcpy(&leds[324], packetBuffer+2, 972);
+    if (starting) {
+    for (int i = 0; i < 648; i++) {
+      FastLED.setBrightness(brightness);
     }
-  } else if (packetSize == 1) {
+    brightness--;
+    if (brightness <= 0) {
+      starting = false;
+      brightness = 255;
+      for (int i = 0; i < 648; i++) {
+        leds[i] = CRGB::Black;
+      }
+      FastLED.setBrightness(brightness);
+    }
     FastLED.show();
+  } else {
+    int packetSize = Udp.parsePacket();
+    if (packetSize == IN_BUFFER_SIZE) {
+      Serial.println("Showing!");
+      Udp.read((char*)packetBuffer, IN_BUFFER_SIZE);
+      if (packetBuffer[0] == 3 && packetBuffer[1] == 3) {
+        memcpy(leds, packetBuffer+2, 972);
+      } else if (packetBuffer[0] == 3 && packetBuffer[1] == 4) {
+        memcpy(&leds[324], packetBuffer+2, 972);
+      }
+    } else if (packetSize == 1) {
+      FastLED.show();
+    }
   }
 }
 
